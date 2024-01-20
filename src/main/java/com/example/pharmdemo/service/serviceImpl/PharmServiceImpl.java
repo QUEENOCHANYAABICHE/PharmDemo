@@ -151,7 +151,7 @@ public class PharmServiceImpl implements PharmService {
             throw new DrugDoesNotExistException("The drug does not exist");
 
         }
-        DrugResponse  = DrugResponse.builder()
+        DrugResponse drugResponse = DrugResponse.builder()
                 .id(findDrug.get().getId())
                 .name(findDrug.get().getName())
                 .Type(findDrug.get().getDrugsType().toString())
