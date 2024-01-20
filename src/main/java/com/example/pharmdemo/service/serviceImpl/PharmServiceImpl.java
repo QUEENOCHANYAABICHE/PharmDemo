@@ -124,6 +124,7 @@ public class PharmServiceImpl implements PharmService {
         //find all drugs in the database and put it in a list
         //set the drug and Api Response to return a list of drugs
         //return the apiResponse holding the list of drugs
+
         List<Drugs> allDrugs = pharmRepo.findAll();
 
         List<DrugResponse>  responses = allDrugs.stream()
@@ -150,7 +151,7 @@ public class PharmServiceImpl implements PharmService {
             throw new DrugDoesNotExistException("The drug does not exist");
 
         }
-        DrugResponse drugResponse = DrugResponse.builder()
+        DrugResponse  = DrugResponse.builder()
                 .id(findDrug.get().getId())
                 .name(findDrug.get().getName())
                 .Type(findDrug.get().getDrugsType().toString())
