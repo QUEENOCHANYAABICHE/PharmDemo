@@ -6,8 +6,8 @@ import com.example.pharmdemo.dto.respone.ApiResponse;
 import com.example.pharmdemo.dto.respone.DrugResponse;
 import com.example.pharmdemo.enums.DrugsType;
 import com.example.pharmdemo.enums.ResponseCode;
-import com.example.pharmdemo.exception.DrugAlreadyExistException;
-import com.example.pharmdemo.exception.DrugDoesNotExistException;
+import com.example.pharmdemo.exceptions.DrugAlreadyExistsException;
+import com.example.pharmdemo.exceptions.DrugDoesNotExistException;
 import com.example.pharmdemo.models.Drugs;
 import com.example.pharmdemo.repository.PharmRepo;
 import com.example.pharmdemo.service.PharmService;
@@ -43,7 +43,7 @@ public class PharmServiceImpl implements PharmService {
 
 
         if(drugExist.isPresent()){
-            throw new DrugAlreadyExistException("drug already exist in database");
+            throw new DrugAlreadyExistsException("drug already exist in database");
         }
 
 
