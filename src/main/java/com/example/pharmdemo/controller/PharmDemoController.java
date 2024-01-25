@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.pharmdemo.utils.Endpoints.*;
+import static com.example.pharmdemo.utils.PharmDemoEndpoints.*;
 
 
 @RestController

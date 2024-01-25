@@ -1,6 +1,6 @@
 package com.example.pharmdemo.utils;
 
-public class Endpoints {
+public class PharmDemoEndpoints {
     public static final String BASE_URL = "api/v1/pharm";
     public static final String CREATE_DRUG = "/create";
     public static final String UPDATE_DRUG = "/update";
@@ -12,7 +12,7 @@ public class Endpoints {
 
 
 
-    public Endpoints(){
+    public PharmDemoEndpoints(){
 
     }
 }
