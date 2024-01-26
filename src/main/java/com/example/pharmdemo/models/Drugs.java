@@ -24,4 +24,8 @@ public class Drugs {
     @Enumerated(EnumType.STRING)
     private DrugsType drugsType;
 
+//    @ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
+//    @JoinColumn(nullable = false, name = "id")
+
+//    private User user;
 }
