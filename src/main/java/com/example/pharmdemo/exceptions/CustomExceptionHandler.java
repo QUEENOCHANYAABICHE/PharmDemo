@@ -24,6 +24,11 @@ public class CustomExceptionHandler {
         return handleException(e, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = UserAlreadyExistsException.class)
+    public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException e){
+      return handleException(e, HttpStatus.BAD_REQUEST);
+    }
+
     public ResponseEntity<Object> handleException(RuntimeException e, HttpStatus httpStatus){
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
         new ErrorResponse(
@@ -34,8 +39,5 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(e, httpStatus);
 
     }
-
-
-
 
 }
