@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface PharmRepo extends JpaRepository<Drugs, Long> {
+public interface PharmRepository extends JpaRepository<Drugs, Long> {
 
     Optional<Drugs> findById(Long id);
 
