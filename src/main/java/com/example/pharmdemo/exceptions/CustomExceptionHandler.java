@@ -29,6 +29,11 @@ public class CustomExceptionHandler {
       return handleException(e, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = UsernameNotFoundException.class)
+    public ResponseEntity<Object> handleUserNotFoundException(UsernameNotFoundException e){
+        return handleException(e, HttpStatus.BAD_REQUEST);
+    }
+
     public ResponseEntity<Object> handleException(RuntimeException e, HttpStatus httpStatus){
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
         new ErrorResponse(
