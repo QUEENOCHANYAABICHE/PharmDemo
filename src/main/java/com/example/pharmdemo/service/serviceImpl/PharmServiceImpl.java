@@ -9,12 +9,14 @@ import com.example.pharmdemo.enums.ResponseCode;
 import com.example.pharmdemo.exceptions.DrugAlreadyExistsException;
 import com.example.pharmdemo.exceptions.DrugDoesNotExistException;
 import com.example.pharmdemo.models.Drugs;
-import com.example.pharmdemo.repository.PharmRepo;
+import com.example.pharmdemo.repository.PharmRepository;
 import com.example.pharmdemo.service.PharmService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PharmServiceImpl implements PharmService {
 
-    private final PharmRepo pharmRepo;
+    private final PharmRepository pharmRepository;
 
     @Override
     public ApiResponse<DrugResponse> createDrugs(DrugRequest drugRequest) {
@@ -39,7 +41,7 @@ public class PharmServiceImpl implements PharmService {
         // setting up the drugResponse
         // set and return a new apiResponse
 
-        Optional<Drugs> drugExist = pharmRepo.findByName(drugRequest.getName());
+        Optional<Drugs> drugExist = pharmRepository.findByName(drugRequest.getName());
 
 
         if(drugExist.isPresent()){
@@ -50,10 +52,10 @@ public class PharmServiceImpl implements PharmService {
         Drugs drugs = Drugs.builder()
                 .name(drugRequest.getName())
                 .drugsType(DrugsType.valueOf(drugRequest.getDrugType()))
-                .prodDate(Instant.now())
-                .expDate(Instant.now().plusSeconds(500))
+                .prodDate(LocalDateTime.now())
+                .expDate(LocalDateTime.now().plusSeconds(500))
                 .build();
-        pharmRepo.save(drugs);
+        pharmRepository.save(drugs);
 
         DrugResponse drugResponse = DrugResponse.builder()
                 .id(drugs.getId())
@@ -67,7 +69,6 @@ public class PharmServiceImpl implements PharmService {
                 .statusCode(ResponseCode.DRUG_CREATED_SUCCESSFULLY.getCode())
                 .data(drugResponse)
                 .message(ResponseCode.DRUG_CREATED_SUCCESSFULLY.getMessage())
-                .time(Instant.now())
                 .build();
         return apiresponse;
         //return new ApiResponse<>(ResponseCode.DRUG_CREATED_SUCCESSFULLY.getMessage(),Instant.now(),ResponseCode.DRUG_CREATED_SUCCESSFULLY.getCode(), drugResponse);
@@ -80,17 +81,17 @@ public class PharmServiceImpl implements PharmService {
         //if not throw an error
         //set drug response & Apiresponse
         //return Apiresponse
-        Optional<Drugs> findDrug = pharmRepo.findByName(drugRequest.getName());
+        Optional<Drugs> findDrug = pharmRepository.findByName(drugRequest.getName());
         if(findDrug.isEmpty()){
             throw new DrugDoesNotExistException("The drug does not exist");
         }
         Drugs drugs = Drugs.builder()
                 .name(drugRequest.getName())
                 .drugsType(DrugsType.valueOf(drugRequest.getDrugType()))
-                .prodDate(Instant.now())
-                .expDate(Instant.now().plusSeconds(500))
+                .prodDate(LocalDateTime.now())
+                .expDate(LocalDateTime.now().plusSeconds(500))
                 .build();
-        pharmRepo.save(drugs);
+        pharmRepository.save(drugs);
 
          DrugResponse drugResponse = DrugResponse.builder()
                  .id(drugs.getId())
@@ -104,7 +105,6 @@ public class PharmServiceImpl implements PharmService {
                 .statusCode(ResponseCode.DRUG_UPDATED_SUCCESSFULLY.getCode())
                 .data(drugResponse)
                 .message(ResponseCode.DRUG_UPDATED_SUCCESSFULLY.getMessage())
-                .time(Instant.now())
                 .build();
 
 
@@ -125,7 +125,7 @@ public class PharmServiceImpl implements PharmService {
         //set the drug and Api Response to return a list of drugs
         //return the apiResponse holding the list of drugs
 
-        List<Drugs> allDrugs = pharmRepo.findAll();
+        List<Drugs> allDrugs = pharmRepository.findAll();
 
         List<DrugResponse>  responses = allDrugs.stream()
                 .map(drug -> DrugResponse.builder()
@@ -146,7 +146,7 @@ public class PharmServiceImpl implements PharmService {
         //build drug with the values passed in the request
         //set ApiResponse, DrugResponse
         //create object of apiresponse & return it
-        Optional<Drugs> findDrug = pharmRepo.findByName(name);
+        Optional<Drugs> findDrug = pharmRepository.findByName(name);
         if (findDrug.isEmpty()) {
             throw new DrugDoesNotExistException("The drug does not exist");
 
@@ -159,21 +159,21 @@ public class PharmServiceImpl implements PharmService {
                 .expDate(findDrug.get().getExpDate().toString())
                 .build();
 
-        return new ApiResponse<>(ResponseCode.DRUG_CREATED_SUCCESSFULLY.getMessage(),Instant.now(),ResponseCode.DRUG_CREATED_SUCCESSFULLY.getCode(), drugResponse);
+        return new ApiResponse<>(ResponseCode.DRUG_CREATED_SUCCESSFULLY.getMessage(),ResponseCode.DRUG_CREATED_SUCCESSFULLY.getCode(), drugResponse);
     }
 
     @Override
     public ApiResponse<String> deleteDrugs(DrugRequest drugRequest) {
         //find the drug by id from the db
         //If found, delete, else throw an error
-        Optional<Drugs> findDrugs = pharmRepo.findByName(drugRequest.getName());
+        Optional<Drugs> findDrugs = pharmRepository.findByName(drugRequest.getName());
         if (!findDrugs.isPresent()) {
             throw new DrugDoesNotExistException("The drug does not exist");
         }
 
-        pharmRepo.deleteById(findDrugs.get().getId());
+        pharmRepository.deleteById(findDrugs.get().getId());
 
-        return new ApiResponse<>(ResponseCode.DRUG_DELETED_SUCCESSFULLY.getMessage(),Instant.now(),ResponseCode.DRUG_DELETED_SUCCESSFULLY.getCode(), "PROCESSED SUCCESSFUL");
+        return new ApiResponse<>(ResponseCode.DRUG_DELETED_SUCCESSFULLY.getMessage(),ResponseCode.DRUG_DELETED_SUCCESSFULLY.getCode(), "PROCESSED SUCCESSFUL");
     }
 
 
