@@ -5,14 +5,14 @@ import java.util.regex.Pattern;
 
 public class EmailValidator {
 
-    private final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\." +
+    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\." +
             "[_A-Za-z0-9-]+)*@" +
             "[A-Za-z0-9-]+(\\." +
             "[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
-    public static boolean isValid(String email){
-        Pattern pattern = Pattern.compile(email);
-        Matcher matcher = pattern.matcher(email);
+    public static boolean isValid(String username){
+        Pattern pattern = Pattern.compile(EMAIL_PATTERN);
+        Matcher matcher = pattern.matcher(username);
         return matcher.matches();
     }
 
