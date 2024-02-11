@@ -5,44 +5,78 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.HashMap;
 
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
     @ExceptionHandler(value = {DrugAlreadyExistsException.class})
-    public ResponseEntity<Object> handleDrugAlreadyExistsException(DrugAlreadyExistsException e){
-        //Create payload containing exception details
-        //Return the actual response entity
-        return handleException(e, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<HashMap<String,Object>> handleDrugAlreadyExistsException(DrugAlreadyExistsException e){
+        return  handle (e.getMessage(),HttpStatus.CONFLICT.value(),HttpStatus.CONFLICT);
+    }
+    private ResponseEntity<HashMap<String,Object>> handle(String message,int statusCode,HttpStatus httpStatus){
+        HashMap<String,Object> errors = new HashMap<>();
+        errors.put("message",message);
+        errors.put("status",statusCode);
+        errors.put("date", formatLocalDateTime(LocalDateTime.now()));
+        return new ResponseEntity<>(errors,httpStatus);
+    }
 
+    private String formatLocalDateTime(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return dateTime.format(formatter);
     }
 
     @ExceptionHandler(value ={DrugDoesNotExistException.class})
-    public ResponseEntity<Object> handleDrugDoesNotExistException(DrugDoesNotExistException e){
-        return handleException(e, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<HashMap<String,Object>> handleDrugDoesNotExistException(DrugDoesNotExistException e){
+        return  handle (e.getMessage(),HttpStatus.CONFLICT.value(),HttpStatus.BAD_REQUEST);
+
     }
 
     @ExceptionHandler(value = UserAlreadyExistsException.class)
-    public ResponseEntity<Object> handleUserAlreadyExistsException(UserAlreadyExistsException e){
-      return handleException(e, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<HashMap<String,Object>> handleUserAlreadyExistsException(UserAlreadyExistsException e){
+        return  handle (e.getMessage(),HttpStatus.CONFLICT.value(),HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = InvalidCredentialsException.class)
+    public ResponseEntity<HashMap<String,Object>> handleInvalidCredentialsException(InvalidCredentialsException e){
+        return  handle (e.getMessage(),HttpStatus.CONFLICT.value(),HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = UsernameNotFoundException.class)
-    public ResponseEntity<Object> handleUserNotFoundException(UsernameNotFoundException e){
-        return handleException(e, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<HashMap<String,Object>> handleUserNotFoundException(UsernameNotFoundException e){
+        return  handle (e.getMessage(),HttpStatus.CONFLICT.value(),HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<Object> handleException(RuntimeException e, HttpStatus httpStatus){
-        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
-        new ErrorResponse(
-                e.getMessage(),
-                ZonedDateTime.now(ZoneId.of("Z")),
-                badRequest
-        );
-        return new ResponseEntity<>(e, httpStatus);
-
+    @ExceptionHandler(value = UserNotFoundException.class)
+    public ResponseEntity<HashMap<String,Object>> handleUserNotFoundException(UserNotFoundException e){
+        return  handle (e.getMessage(),HttpStatus.CONFLICT.value(),HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(value = InputValidationException.class)
+    public ResponseEntity<HashMap<String,Object>>  handleInputValidationException(InputValidationException e){
+        return  handle (e.getMessage(),HttpStatus.CONFLICT.value(),HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = ExpiredOtpException.class)
+    public ResponseEntity<HashMap<String,Object>>  handleExpiredOtpException(ExpiredOtpException e){
+        return  handle (e.getMessage(),HttpStatus.CONFLICT.value(),HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = OtpException.class)
+    public ResponseEntity<HashMap<String,Object>>  handleOtpException(OtpException e){
+        return  handle (e.getMessage(),HttpStatus.CONFLICT.value(),HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = UserDisabledException.class)
+    public ResponseEntity<HashMap<String,Object>>  handleUserDisabledException(UserDisabledException e){
+        return  handle (e.getMessage(),HttpStatus.CONFLICT.value(),HttpStatus.BAD_REQUEST);
+    }
+
 
 }
