@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 @Getter
@@ -19,8 +21,8 @@ public class Drugs {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private Instant prodDate;
-    private Instant expDate;
+    private LocalDateTime prodDate;
+    private LocalDateTime expDate;
     @Enumerated(EnumType.STRING)
     private DrugsType drugsType;
 
