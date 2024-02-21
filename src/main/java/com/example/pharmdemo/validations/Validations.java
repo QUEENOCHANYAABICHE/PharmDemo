@@ -30,7 +30,7 @@ public class Validations<T> {
                 String jsonErrorMessage = objectMapper.writeValueAsString(errorMessagesSet);
                 throw new InputValidationException(jsonErrorMessage);
             }catch(JsonProcessingException e){
-                e.printStackTrace();
+                throw new InputValidationException(e.getMessage());
             }
         }
     }
